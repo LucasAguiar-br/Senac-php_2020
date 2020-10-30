@@ -1,0 +1,66 @@
+<?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+/* Connect to a MySQL database using driver invocation */
+$dsn = 'sqlsrv:Server=localhost\\SQLEXPRESS;Database=PI_EAGLE';
+$user = 'sa';
+$password = '123';
+
+
+
+$db = new PDO($dsn, $user, $password);
+
+
+// var_dump($db);
+//select
+$sql = 'SELECT nome, telefone FROM cliente';
+
+$r = $db->query($sql);
+$reg = $r->fetch(PDO::FETCH_ASSOC);
+
+// echo "Sr(a) {$reg['nome']}, seu telefone {$reg['telefone']} será bloqueado se a conta não for paga.\n" . PHP_EOL;
+// foreach ($db->query($sql) as $registro){
+//     echo "Nome:{$registro['nome']} Telefone: {$registro['telefone']}<br>" . PHP_EOL;
+// }
+
+
+//delete
+if ( $db->query('DELETE FROM cliente WHERE id = 2') ) {
+    
+    	echo "ID 2 apagado com sucesso!\n\n";
+    
+    } else {
+    
+    	echo "Erro ao tentar apagar o ID 2";
+    }
+
+foreach ($db->query($sql) as $registro) {
+    echo "Nome:{$registro['nome']} Telefone: {$registro['telefone']}<br>";
+}
+
+
+//update
+
+if ( $db->query('UPDATE cliente SET nome = "Arthur" WHERE id = 3') ) {
+    echo "ID 3 atualizado com sucesso!\n\n";
+    
+    } else {
+    
+    echo "Erro ao tentar atualizar o ID 3";
+    }
+
+
+    if ( $db->query('	INSERT INTO cliente 
+    						(id, nome, telefone) 
+    					VALUES 
+    					(2, "Luiz Bono", 5511994586373)') ) {
+    
+    	echo "ID 2 gerado novamente com sucesso!\n\n";
+    
+    } else {
+    
+    	echo "Erro ao tentar gerar novamente o ID 2";
+    }
