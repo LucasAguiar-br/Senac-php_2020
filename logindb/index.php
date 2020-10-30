@@ -8,15 +8,8 @@ session_start();
 
 require_once 'db.php';
 
-
-//exemplo de senha
-// $pass = password_hash('12345', PASSWORD_DEFAULT);
-
-// $db->query("
-// 			INSERT INTO LOGIN
-// 			(NOME, EMAIL, SENHA)
-// 			VALUES
-// 			('LUCAS AGUIAR', 'LUCAS@LUCAS.COM', '$pass')");
+//Exemplo de como fazer o salt na senha
+//$pass = password_hash('123456', PASSWORD_DEFAULT);
 
 if ( isset($_SESSION['login']) ) { //Caso o usuário já esteja logado no sistema
 
@@ -28,14 +21,15 @@ if ( isset($_SESSION['login']) ) { //Caso o usuário já esteja logado no sistem
 
 	$login = filter_var( $_POST['login'], FILTER_SANITIZE_EMAIL);
 	$senha = $_POST['senha'];
-	
-	// Verificar se existe o usuário e pegar o hash da senha
-	$r = $db->query("SELECT SENHA FROM LOGIN WHERE EMAIL = '$login'");
+
+	//Verficar se existe o usuário e pegar o hash da senha
+	$r = $db->query("SELECT senha FROM usuario WHERE email = '$login'");
 	$reg = $r->fetch(PDO::FETCH_ASSOC);
 	$hash = $reg['senha'];
-	//comparar a senha passada pelo usuário com o hash no bd
-	if (password_verify($senha, $hash)){
-	
+
+	//Comprara a senha passada pelo usuário com o hash armazenado no DB
+	if ( password_verify( $senha, $hash) ) {
+
 		$_SESSION['login'] = $login;
 
 		include 'header_tpl.php';
